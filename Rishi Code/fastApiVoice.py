@@ -10,3 +10,6 @@ app = FastAPI()
 @app.post("/voice")
 async def voice_Data(fileVoice : UploadFile = File(...)):
     text = voiceTtext(fileVoice.file)
+    dct = {"output":text}
+    jsonData = jsonable_encoder(dct)
+    return JSONResponse(content = jsonData)
