@@ -16,6 +16,16 @@ resList = db['resList']
 
 app = FastAPI()
 
+@app.get("/data") #to try out mongo Connection
+def Data():
+    rdata = resList
+    output = []
+    for s in rdata.find():
+         output.append( {"text":s['text'],"cls":s['cls'] })
+    dct = {"output":output}
+    jsonData = jsonable_encoder(dct)
+    return JSONResponse(content = jsonData)
+
 @app.post("/voice/")
 async def create_upload_files(files: List[UploadFile] = File(...)):
     text=[]
