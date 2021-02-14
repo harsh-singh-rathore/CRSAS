@@ -9,6 +9,7 @@ from typing import List
 import uvicorn
 from sklearn.feature_extraction.text import CountVectorizer
 import pymongo
+from datetime import datetime
 
 client = pymongo.MongoClient("mongodb+srv://RiXiRx:tAf1t7vjsGbRsPMN@cluster0.rrhdn.mongodb.net/")
 db = client['MakeHarvard']
@@ -30,6 +31,8 @@ def Data():
 async def create_upload_files(files: List[UploadFile] = File(...)):
     text=[]
     cls = []
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S %d/%m/%Y")
     for File in files:
         text.append(voiceTtext(File.file))
         cls.append(classifier(text))
@@ -38,7 +41,7 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
         print("data uploaded")
     except:
         print("Error")
-    dct = {"text":text[0],"cls":cls[0]}
+    dct = {"text":text[0],"cls":cls[0],"time":current_time}
     jsonData = jsonable_encoder(dct)
     return JSONResponse(content = jsonData)
 
