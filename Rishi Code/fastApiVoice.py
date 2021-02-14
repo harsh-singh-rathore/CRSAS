@@ -24,7 +24,7 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
         text.append(voiceTtext(File.file))
         cls.append(classifier(text))
     try:
-        resList.insert_one({"text":text[0],"cls":cls})
+        resList.insert_one({"text":text[0],"cls":cls[0]})
         print("data uploaded")
     except:
         print("Error")
