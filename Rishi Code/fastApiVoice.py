@@ -4,18 +4,21 @@ from fastapi.responses import JSONResponse
 from fastapi import File,UploadFile
 from fastapi.responses import HTMLResponse
 import speech_recognition as sr
-from mlModels import voiceTtext
+from mlModels import voiceTtext, classifier
 from typing import List
 import uvicorn
+from sklearn.feature_extraction.text import CountVectorizer
 
 app = FastAPI()
 
 @app.post("/voice/")
 async def create_upload_files(files: List[UploadFile] = File(...)):
     text=[]
+    cls = []
     for File in files:
         text.append(voiceTtext(File.file))
-    dct = {"output":text}
+        cls.append(classifier(text))
+    dct = {"text":text[0],"cls":cls}
     jsonData = jsonable_encoder(dct)
     return JSONResponse(content = jsonData)
 
