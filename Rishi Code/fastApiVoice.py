@@ -8,6 +8,11 @@ from mlModels import voiceTtext, classifier
 from typing import List
 import uvicorn
 from sklearn.feature_extraction.text import CountVectorizer
+import pymongo
+
+client = pymongo.MongoClient("mongodb+srv://RiXiRx:tAf1t7vjsGbRsPMN@cluster0.rrhdn.mongodb.net/")
+db = client['MakeHarvard']
+resList = db['resList']
 
 app = FastAPI()
 
@@ -18,6 +23,11 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
     for File in files:
         text.append(voiceTtext(File.file))
         cls.append(classifier(text))
+    try:
+        resList.insert_one({"text":text[0],"cls":cls})
+        print("data uploaded")
+    except:
+        print("Error")
     dct = {"text":text[0],"cls":cls}
     jsonData = jsonable_encoder(dct)
     return JSONResponse(content = jsonData)
