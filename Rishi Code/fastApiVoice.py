@@ -28,7 +28,7 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
         print("data uploaded")
     except:
         print("Error")
-    dct = {"text":text[0],"cls":cls}
+    dct = {"text":text[0],"cls":cls[0]}
     jsonData = jsonable_encoder(dct)
     return JSONResponse(content = jsonData)
 
